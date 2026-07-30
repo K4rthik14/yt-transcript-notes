@@ -75,17 +75,35 @@ def fetch_transcript_from_url(url: str) -> str:
 
         return full_text
 
-    except TranscriptsDisabled as e:
-        raise RuntimeError("Transcripts are disabled for this YouTube video.") from e
-    except NoTranscriptFound as e:
-        raise RuntimeError("No transcript found for this YouTube video.") from e
-    except VideoUnavailable as e:
-        raise RuntimeError("This YouTube video is private or unavailable.") from e
-    except InvalidVideoId as e:
-        raise RuntimeError("Invalid YouTube Video ID.") from e
-    except CouldNotRetrieveTranscript as e:
-        raise RuntimeError("Could not retrieve transcript from YouTube.") from e
+    except VideoUnavailable:
+        raise RuntimeError(
+            "This video is unavailable or cannot be accessed."
+        )
+
+    except NoTranscriptFound:
+        raise RuntimeError(
+            "No transcript is available for this video."
+        )
+
+    except TranscriptsDisabled:
+        raise RuntimeError(
+            "The creator has disabled transcripts for this video."
+        )
+
+    except InvalidVideoId:
+        raise RuntimeError(
+            "Invalid YouTube Video ID."
+        )
+
+    except CouldNotRetrieveTranscript:
+        raise RuntimeError(
+            "Could not retrieve transcript from YouTube."
+        )
+
     except (ValueError, RuntimeError):
         raise
+
     except Exception as e:
-        raise RuntimeError(f"Failed to fetch YouTube transcript: {e}") from e
+        raise RuntimeError(
+            f"Failed to fetch YouTube transcript: {e}"
+        )
