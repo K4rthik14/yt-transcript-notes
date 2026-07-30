@@ -1,14 +1,20 @@
-# src/llm/client.py
-import os
+"""Gemini API client wrapper."""
 
+import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+
+from src.utils.constant import (
+    DEFAULT_MAX_TOKENS,
+    DEFAULT_MODEL,
+    DEFAULT_TEMPERATURE,
+)
 
 load_dotenv()
 
 
 class GeminiClient:
-    """Wrapper around the Gemini API."""
+    """Wrapper around the Gemini API with configurable parameters."""
 
     def __init__(self) -> None:
         api_key = os.getenv("GEMINI_API_KEY")
@@ -20,17 +26,35 @@ class GeminiClient:
 
         genai.configure(api_key=api_key)
 
-        model_name = os.getenv(
-            "GEMINI_MODEL",
-            "gemini-2.5-flash",
-        )
+    def generate(
+        self,
+        prompt: str,
+        model_name: str = DEFAULT_MODEL,
+        temperature: float = DEFAULT_TEMPERATURE,
+        max_output_tokens: int = DEFAULT_MAX_TOKENS,
+    ) -> str:
+        """
+        Generate text content from Gemini model.
 
-        self.model = genai.GenerativeModel(model_name)
+        Args:
+            prompt: The full prompt string.
+            model_name: Name of the Gemini model.
+            temperature: Sampling temperature (0.0 to 1.0).
+            max_output_tokens: Maximum tokens in response.
 
-    def generate(self, prompt: str) -> str:
-        """Generate Markdown notes from a prompt."""
+        Returns:
+            Generated text content.
 
-        response = self.model.generate_content(prompt)
-
-        return response.text
-
+        Raises:
+            RuntimeError: If Gemini API fails.
+        """
+        try:
+            model = genai.GenerativeModel(model_name)
+            config = genai.types.GenerationConfig(
+                temperature=temperature,
+                max_output_tokens=max_output_tokens,
+            )
+            response = model.generate_content(prompt, generation_config=config)
+            return response.text
+        except Exception as e:
+            raise RuntimeError(f"Gemini API Error: {e}") from e

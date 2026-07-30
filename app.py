@@ -1,18 +1,29 @@
+"""Streamlit application main entry point."""
+
 import streamlit as st
 
 # UI Components
+from src.ui.output import render_output
 from src.ui.sidebar import render_sidebar
 from src.ui.transcript_input import render_transcript_input
-from src.ui.output import render_output
+from src.utils.constant import (
+    DEFAULT_MAX_TOKENS,
+    DEFAULT_MODEL,
+    DEFAULT_TEMPERATURE,
+)
 
 
 def initialize_session_state() -> None:
-    """Initialize Streamlit session state."""
-
+    """Initialize default Streamlit session state variables."""
     defaults = {
         "generated_notes": "",
         "selected_style": "Study Notes",
+        "selected_model": DEFAULT_MODEL,
+        "temperature": DEFAULT_TEMPERATURE,
+        "max_tokens": DEFAULT_MAX_TOKENS,
         "transcript": "",
+        "is_generating": False,
+        "view_mode": "Preview",
     }
 
     for key, value in defaults.items():
@@ -22,7 +33,6 @@ def initialize_session_state() -> None:
 
 def main() -> None:
     """Application entry point."""
-
     st.set_page_config(
         page_title="YT Transcript Notes",
         page_icon="📝",
@@ -37,15 +47,15 @@ def main() -> None:
         "Convert YouTube transcripts into clean, structured Markdown notes using AI."
     )
 
-    # Sidebar
+    # Sidebar Settings
     render_sidebar()
 
-    # Transcript Input
+    # Transcript Input Section
     render_transcript_input()
 
     st.divider()
 
-    # Generated Notes
+    # Generated Notes Output Section
     render_output()
 
 

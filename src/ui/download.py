@@ -1,15 +1,22 @@
-# src/ui/download.py
+"""Download button UI component."""
 
 import streamlit as st
 
 
-def render_download_button(markdown: str) -> None:
-    """Render markdown download button."""
+def render_download_button(
+    markdown: str, filename: str = "notes.md"
+) -> None:
+    """
+    Render markdown download button.
 
+    Args:
+        markdown: Content string to download.
+        filename: Target download filename.
+    """
     st.download_button(
         label="⬇️ Download Markdown",
         data=markdown,
-        file_name="notes.md",
+        file_name=filename,
         mime="text/markdown",
         use_container_width=True,
     )
