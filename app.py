@@ -21,6 +21,7 @@ def initialize_session_state() -> None:
         "selected_model": DEFAULT_MODEL,
         "temperature": DEFAULT_TEMPERATURE,
         "max_tokens": DEFAULT_MAX_TOKENS,
+        "youtube_url": "",
         "transcript": "",
         "is_generating": False,
         "view_mode": "Preview",
