@@ -1,6 +1,3 @@
-# src/prompts/summary.md
-
-```md
 Summarize the following YouTube transcript.
 
 Requirements:
@@ -16,4 +13,3 @@ Requirements:
 Transcript:
 
 {{transcript}}
-```
