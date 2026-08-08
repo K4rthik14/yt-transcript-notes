@@ -8,6 +8,12 @@ from src.utils.constant import MIN_TRANSCRIPT_LENGTH
 from src.utils.helper import calculate_text_stats
 
 
+def _clear_transcript() -> None:
+    """Clear both the transcript value and its text-area widget state."""
+    st.session_state.transcript = ""
+    st.session_state.transcript_text_area = ""
+
+
 def render_transcript_input() -> None:
     """Render YouTube URL fetch input, transcript text area, text stats, and actions."""
     with st.container():
@@ -73,19 +79,15 @@ def render_transcript_input() -> None:
             )
 
         with col_clear:
-            clear_clicked = st.button(
+            st.button(
                 "🗑️ Clear Transcript",
                 use_container_width=True,
                 disabled=st.session_state.is_generating or not transcript,
+                on_click=_clear_transcript,
             )
 
         with col_stats:
             st.caption(f"📊 **Characters:** {char_count:,} | **Words:** {word_count:,}")
-
-        if clear_clicked:
-            st.session_state.transcript = ""
-            st.session_state.transcript_text_area = ""
-            st.rerun()
 
         if generate_clicked:
             clean_text = transcript.strip()
