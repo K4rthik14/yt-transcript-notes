@@ -41,6 +41,7 @@ def render_transcript_input() -> None:
                     with st.spinner("Fetching YouTube transcript..."):
                         fetched_text = fetch_transcript_from_url(yt_url)
                     st.session_state.transcript = fetched_text
+                    st.session_state.transcript_text_area = fetched_text
                     st.toast("Transcript fetched successfully!", icon="✅")
                     st.rerun()
                 except Exception as e:
@@ -83,6 +84,7 @@ def render_transcript_input() -> None:
 
         if clear_clicked:
             st.session_state.transcript = ""
+            st.session_state.transcript_text_area = ""
             st.rerun()
 
         if generate_clicked:
